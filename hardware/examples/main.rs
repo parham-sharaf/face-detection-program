@@ -133,7 +133,7 @@ fn main() -> ! {
 
         let rep_up = MouseReport {
             x: 0,
-            y: 4,
+            y: 20,
             buttons: 0,
             wheel: 0,
             pan: 0,
@@ -144,7 +144,7 @@ fn main() -> ! {
 
         let rep_down = MouseReport {
             x: 0,
-            y: -4,
+            y: -20,
             buttons: 0,
             wheel: 0,
             pan: 0,
