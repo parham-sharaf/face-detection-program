@@ -26,8 +26,8 @@ while True:
     # pyautogui.moveTo(1000, 1000)
 
     # frame = cv.imread("/home/parham/Dev/Projects/aimbot/image_processing/Photos/smarties.png", cv.IMREAD_UNCHANGED)
-
     ret, frame = cam.read()
+
     cv.imshow('Camera', frame)
     cv.moveWindow('Camera', 0, 0)
 
@@ -47,6 +47,8 @@ while True:
     lower_bound = np.array([hue_lower, sat_lower, val_lower])
     upper_bound = np.array([hue_upper, sat_upper, val_upper])
 
+    print(lower_bound, upper_bound)
+    print(hsv)
     foreground_mask = cv.inRange(hsv, lower_bound, upper_bound)
 
     cv.imshow('foreground_mask', foreground_mask)

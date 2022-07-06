@@ -1,5 +1,6 @@
 import cv2 as cv
-#
+import pyautogui
+
 # # img = cv.imread("Photos/Jett-Feature-1.jpg", cv.IMREAD_UNCHANGED)
 # img = cv.imread("Photos/Jett-gun.jpeg", cv.IMREAD_UNCHANGED)
 # scale = 60
@@ -26,6 +27,7 @@ import cv2 as cv
 
 import cv2 as cv
 print(cv.__version__)
+
 dispW = 640
 dispH = 480
 flip = 2
@@ -41,27 +43,21 @@ cam = cv.VideoCapture(0)
 
 
 while True:
+    # pyautogui.moveTo(1000, 1000)
+
     ret, frame = cam.read()
+    roi = frame[240: 380, 240: 380].copy()
+    roi = cv.cvtColor(roi, cv.COLOR_BGR2GRAY)
+    roi = cv.cvtColor(roi, cv.COLOR_GRAY2BGR)
+    frame[240: 380, 240: 380] = roi
 
-    x = x + x_inc
-    y = y + y_inc
 
-    if x <= 0:
-         x_inc = 10
-    elif x + rect[0] >= frame.shape[1]:
-        x_inc = -10
-
-    if y <= 0:
-        y_inc = 10
-    elif y + rect[1] >= frame.shape[0]:
-        y_inc = -10
-
-    print (f'x: {x}, y: {y}')
     # frame = cv.resize(frame, (dispW, dispH))
-    frame = cv.rectangle(frame, (0 + x, 0 + y), (rect[0] + x,  rect[1] + y), color, 2)
 
     cv.imshow('Camera', frame)
+    cv.imshow('Region of interest', roi)
     cv.moveWindow('Camera', 200, 200)
+    cv.moveWindow('Region of interest', 1500, 0)
 
     if cv.waitKey(1) == ord('q'):
         break
