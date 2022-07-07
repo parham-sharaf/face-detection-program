@@ -16,24 +16,21 @@ cv.moveWindow('Trackbars', 1400, 0)
 
 
 cv.createTrackbar('hue_lower_right', 'Trackbars', 0, 179, nothing)
-cv.createTrackbar('hue_upper_right', 'Trackbars', 0, 179, nothing)
+cv.createTrackbar('hue_upper_right', 'Trackbars', 5, 179, nothing)
 
-cv.createTrackbar('hue_lower_left', 'Trackbars', 0, 179, nothing)
-cv.createTrackbar('hue_upper_left', 'Trackbars', 0, 179, nothing)
+cv.createTrackbar('hue_lower_left', 'Trackbars', 154, 179, nothing)
+cv.createTrackbar('hue_upper_left', 'Trackbars', 179, 179, nothing)
 
-cv.createTrackbar('sat_lower', 'Trackbars', 0, 255, nothing)
-cv.createTrackbar('sat_upper', 'Trackbars', 0, 255, nothing)
-cv.createTrackbar('val_lower', 'Trackbars', 0, 255, nothing)
-cv.createTrackbar('val_upper', 'Trackbars', 0, 255, nothing)
+cv.createTrackbar('sat_lower', 'Trackbars', 212, 255, nothing)
+cv.createTrackbar('sat_upper', 'Trackbars', 255, 255, nothing)
+cv.createTrackbar('val_lower', 'Trackbars', 83, 255, nothing)
+cv.createTrackbar('val_upper', 'Trackbars', 255, 255, nothing)
 
 while True:
     # pyautogui.moveTo(1000, 1000)
 
-    frame = cv.imread("/home/parham/Dev/Projects/aimbot/image_processing/Photos/smarties.png", cv.IMREAD_UNCHANGED)
-    # ret, frame = cam.read()
-
-    cv.imshow('Camera', frame)
-    cv.moveWindow('Camera', 0, 0)
+    # frame = cv.imread("/home/parham/Dev/Projects/aimbot/image_processing/Photos/smarties.png", cv.IMREAD_UNCHANGED)
+    ret, frame = cam.read()
 
     hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
@@ -62,6 +59,19 @@ while True:
 
     cv.imshow('foreground_mask', foreground_mask_comp)
     cv.moveWindow('foreground_mask', 700, 0)
+
+    contours, _ = cv.findContours(foreground_mask_comp, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    contours = sorted(contours, key=lambda x: cv.contourArea(x), reverse=True)
+    for cnt in contours:
+        area = cv.contourArea(cnt)
+        (x, y, w, h) = cv.boundingRect(cnt)
+        if area >= 100:
+            cv.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0,), 3)
+            cv.line(frame, (int(x + w/2), 0), (int(x + w/2), 480), (0, 255, 0), 3)
+            cv.line(frame, (0, int(y + h/2)), (640, int(y + h/2)), (0, 255, 0), 3)
+
+    cv.imshow('Camera', frame)
+    cv.moveWindow('Camera', 0, 0)
 
     foreground = cv.bitwise_and(frame, frame, mask=foreground_mask_comp)
     cv.imshow('foreground', foreground)
