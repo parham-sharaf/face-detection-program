@@ -1,4 +1,4 @@
-# Mobius
+# Face Detection Program
 
 ## Requirements
 
